@@ -167,8 +167,6 @@ Here are some example query URLs for the `v1.0` and `v2.0` endpoints:
 > Note: The query parameters can be combined, and any of them can be omitted in the search.
 
 
-A note on the queries above... "species, name, minimumAge, and breed" can occur in this string together AND any of these parameters can be omitted in the search. If you omit them all, as in the first search query above, a list of 1-10 will be returned.
-
 #### Sample JSON Response
 
 When making `GET` requests, you will receive a JSON response containing details of the animals, including the following fields:
