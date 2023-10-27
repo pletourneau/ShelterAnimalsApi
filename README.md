@@ -16,7 +16,7 @@
 
 ## Description
 
-- _This API will allow a user to manage a database of shelter animals._
+- _This API will allow a user to manage a database of shelter animals. It allows the user to Create, Read, Edit, and Delete (CRUD)entries to and from the database. The read functionality allows for searches by any or all of the parameters in the animal class. The response is also paginated._
 
 - _Technical Details:_
 
