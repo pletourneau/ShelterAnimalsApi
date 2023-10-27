@@ -161,7 +161,7 @@ A note on the query above... "species, name, minimumAge, and breed" can occur in
 
 ## Known Bugs
 
-- _none. Please email Paul at <pletourneau62@gmail.com> if any are found!_
+- _none found. Please email Paul at <pletourneau62@gmail.com> if/when any are found!_
 
 ## License
 
