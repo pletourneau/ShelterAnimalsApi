@@ -23,6 +23,7 @@
   - _This web application was written using C#, run using .NET framework, and database query and relationships handled using Entity Framework Core._
   - _Full CRUD functionality works for the Animal class._
   - _The list of animals from the get request has been paginated_
+  - _Versioning has been implemented_
   - _Data storage is managed using MySQL. Entity Framework Core .NET Command-line Tools (or dotnet ef) is used for database version control -- migrations are created to tell MySQL how the database is structured and updated as needed._
 
 
@@ -35,6 +36,9 @@
   > ```
   > $ dotnet tool install --global dotnet-ef --version 6.0.0
   > ```
+
+### Install Postman
+(Optional) [Download and install Postman](https://www.postman.com/downloads/).
 
 ### Setting Up the Project
 
@@ -103,16 +107,24 @@ This API supports versioning to ensure backward compatibility and smooth transit
 
 ### Note on Pagination
 
-The default for the `pageIndex` (on which page to begin) is `1` and for `pageSize` (how many results will be displayed on each page)is `10` when returning the paginated animals list.
+The default for the `pageIndex` (on which page to begin) is `1` and for `pageSize` (how many results will be displayed on each page) is `10` (v1.0) or `3` (v2.0) when returning the paginated animals list.
 
 To modify this, alter the query parameters (the integer after the equal signs) of `pageIndex` and `pageSize` in the example query below.
 
-#### Example Query
+#### Example Queries 
+(showing different versions of this get request)
 ```
-https://localhost:7135/api/Animals/v1.0/animals?pageIndex=1&pageSize=10  OR  https://localhost:7135/api/Animals/v2.0/animals?pageIndex=1&pageSize=3
+https://localhost:7135/api/Animals/v1.0/animals?pageIndex=1&pageSize=10
 
 ```
-..........................................................................................
+
+OR
+
+```
+https://localhost:7135/api/Animals/v2.0/animals?pageIndex=1&pageSize=3
+
+```
+
 
 ## Endpoints
 Base URL: `https://localhost:7135`
