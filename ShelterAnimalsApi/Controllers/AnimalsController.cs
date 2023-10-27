@@ -18,8 +18,9 @@ namespace ShelterAnimalsApi.Controllers
     // GET api/animals
     // GET api/animals
     [HttpGet]
-    public async Task<List<Animal>> Get(string species, string name, int minimumAge, string breed)
+    public async Task<ActionResult<PaginatedList<Animal>>> Get(string species, string name, int minimumAge, string breed, int pageIndex = 1, int pageSize = 10)
     {
+
       IQueryable<Animal> query = _db.Animals.AsQueryable();
 
       if (species != null)
@@ -42,7 +43,15 @@ namespace ShelterAnimalsApi.Controllers
         query = query.Where(entry => entry.Age >= minimumAge);
       }
 
-      return await query.ToListAsync();
+      var totalCount = await query.CountAsync();
+
+      query = query.Skip((pageIndex -1) * pageSize).Take(pageSize);
+
+      var animals = await query.ToListAsync();
+
+      var paginatedList = new PaginatedList<Animal>(animals, totalCount, pageIndex, pageSize);
+
+      return paginatedList;
     }
 
 
