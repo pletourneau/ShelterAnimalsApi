@@ -7,6 +7,6 @@
   },
   "AllowedHosts": "*",
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Port=3306;database=animal_shelter_api;uid=root;pwd=epicodus;"
+    "DefaultConnection": "Server=localhost;Port=3306;database=shelter_animals_api;uid=root;pwd=epicodus;"
   }
 }
