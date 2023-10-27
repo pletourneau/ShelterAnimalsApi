@@ -16,7 +16,7 @@
 
 ## Description
 
-- _This API will allow a user to manage a database of shelter animals. It allows the user to Create, Read, Edit, and Delete (CRUD)entries to and from the database. The read functionality allows for searches by any or all of the parameters in the animal class. The response is also paginated._
+- _This API will allow a user to manage a database of shelter animals. It allows the user to Create, Read, Edit, and Delete (CRUD)entries to and from the database. The read functionality allows for searches by any or all of the parameters in the animal class. The response is also paginated and versioning has been implemented._
 
 - _Technical Details:_
 
@@ -68,10 +68,6 @@ _5. Within `appsettings.json`, add the following code, replacing the `uid`, and 
 
 ```
 
-APPSETTINGS.DEV???
-
-
-
 _6. In the terminal, while in the project's production directory `ShelterAnimalsApi`, run the following command. It will utilize the repository's migrations to create and update the database. You may opt to verify that the database has been created successfully in MySQL Workbench._
 
 > ```
@@ -101,6 +97,10 @@ _6. In the terminal, while in the project's production directory `ShelterAnimals
 ## API Documentation
 Explore the API endpoints in Postman or a browser. 
 
+### Versioning
+
+This API supports versioning to ensure backward compatibility and smooth transitions as the API evolves. Currently, two versions are available: `v1.0` and `v2.0`. You can specify the version in the endpoint URL when making requests.
+
 ### Note on Pagination
 
 The default for the `pageIndex` (on which page to begin) is `1` and for `pageSize` (how many results will be displayed on each page)is `10` when returning the paginated animals list.
@@ -109,24 +109,28 @@ To modify this, alter the query parameters (the integer after the equal signs) o
 
 #### Example Query
 ```
-https://localhost:7135/api/Animals?pageIndex=1&pageSize=10
+https://localhost:7135/api/Animals/v1.0/animals?pageIndex=1&pageSize=10  OR  https://localhost:7135/api/Animals/v2.0/animals?pageIndex=1&pageSize=3
 
 ```
 ..........................................................................................
 
-### Endpoints
+## Endpoints
 Base URL: `https://localhost:7135`
 
 ### Animals
-Create, read, edit, and update animals in the shelter
+Create, read, edit, and update animals
 
 #### HTTP Request
 ```
-GET /api/Animals
-POST /api/Animals
-GET /api/Animals/{id}
-PUT /api/Animals/{id}
-DELETE /api/Animals/{id}
+- **Version 1.0** (v1.0)
+  - `GET /api/Animals/v1.0/animals`: Get a paginated list of animals.
+  - `POST /api/Animals`: Create a new animal record.
+  - `GET /api/Animals/{id}`: Get details of a specific animal.
+  - `PUT /api/Animals/{id}`: Update an existing animal record.
+  - `DELETE /api/Animals/{id}`: Delete an animal record.
+
+- **Version 2.0** (v2.0)
+  - `GET /api/Animals/v2.0/animals`: Get a paginated list of animals with an altered default page size.
 ```
 
 
@@ -139,15 +143,36 @@ DELETE /api/Animals/{id}
 | Age | string | none | false | Return animals with an age greater than or equal to the age integer between 1 and 50|
 
 #### Example Queries
-```
-https://localhost:7135/api/Animals?pageIndex=1&pageSize=10
 
-https://localhost:7135/api/Animals?species=dog&name=ingrid&minimumAge=4&breed=shih-tzu&pageIndex=1&pageSize=10
+Here are some example query URLs for the `v1.0` and `v2.0` endpoints:
 
-```
-A note on the query above... "species, name, minimumAge, and breed" can occur in this string together AND any of these parameters can be omitted in the search. If you omit them all, as in the first search query above, a list of 1-10 will be returned.
+- Version 1.0:
+  - Get the first page of animals with the default page size: 
+  ```
+  `https://localhost:7135/api/Animals/v1.0/animals?pageIndex=1&pageSize=10`
+  ```
+
+  - Custom query with filters: 
+  
+  ```
+  `https://localhost:7135/api/Animals/v1.0/animals?species=dog&name=ingrid&minimumAge=4&breed=shih-tzu&pageIndex=1&pageSize=10`
+  ```
+
+- Version 2.0:
+  - Get the first page of animals with a different page size: 
+  ```
+  `https://localhost:7135/api/Animals/v2.0/animals?pageIndex=1&pageSize=3`
+  ```
+
+> Note: The query parameters can be combined, and any of them can be omitted in the search.
+
+
+A note on the queries above... "species, name, minimumAge, and breed" can occur in this string together AND any of these parameters can be omitted in the search. If you omit them all, as in the first search query above, a list of 1-10 will be returned.
 
 #### Sample JSON Response
+
+When making `GET` requests, you will receive a JSON response containing details of the animals, including the following fields:
+
 ```
 {
   "animalId": 0,
