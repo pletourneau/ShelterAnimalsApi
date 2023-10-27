@@ -1,7 +1,7 @@
 using ShelterAnimalsApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc.Versioning;
 
 
 var builder = WebApplication.CreateBuilder(args);
