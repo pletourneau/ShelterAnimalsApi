@@ -15,10 +15,8 @@ namespace ShelterAnimalsApi.Controllers
       _db = db;
     }
 
-    // GET api/animals
-    [ApiVersion("1.0")]
-    [HttpGet("v1.0/animals")]
-    public async Task<ActionResult<PaginatedList<Animal>>> GetV1(string species, string name, int minimumAge, string breed, int pageIndex = 1, int pageSize = 10)
+    [HttpGet("animals")]
+    public async Task<ActionResult<PaginatedList<Animal>>> GetV1(string species, string name, int age, string breed, int pageIndex = 1, int pageSize = 10)
     {
 
       IQueryable<Animal> query = _db.Animals.AsQueryable();
@@ -38,14 +36,14 @@ namespace ShelterAnimalsApi.Controllers
         query = query.Where(entry => entry.Breed == breed);
       }
 
-      if (minimumAge > 0)
+      if (age > 0)
       {
-        query = query.Where(entry => entry.Age >= minimumAge);
+        query = query.Where(entry => entry.Age >= age);
       }
 
       var totalCount = await query.CountAsync();
 
-      query = query.Skip((pageIndex -1) * pageSize).Take(pageSize);
+      query = query.Skip((pageIndex - 1) * pageSize).Take(pageSize);
 
       var animals = await query.ToListAsync();
 
@@ -53,46 +51,6 @@ namespace ShelterAnimalsApi.Controllers
 
       return paginatedList;
     }
-
-     // GET api/animals
-    [ApiVersion("2.0")]
-    [HttpGet("v2.0/animals")]
-    public async Task<ActionResult<PaginatedList<Animal>>> GetV2(string species, string name, int minimumAge, string breed, int pageIndex = 1, int pageSize = 3)
-    {
-
-      IQueryable<Animal> query = _db.Animals.AsQueryable();
-
-      if (species != null)
-      {
-        query = query.Where(entry => entry.Species == species);
-      }
-
-      if (name != null)
-      {
-        query = query.Where(entry => entry.Name == name);
-      }
-
-      if (breed != null)
-      {
-        query = query.Where(entry => entry.Breed == breed);
-      }
-
-      if (minimumAge > 0)
-      {
-        query = query.Where(entry => entry.Age >= minimumAge);
-      }
-
-      var totalCount = await query.CountAsync();
-
-      query = query.Skip((pageIndex -1) * pageSize).Take(pageSize);
-
-      var animals = await query.ToListAsync();
-
-      var paginatedList = new PaginatedList<Animal>(animals, totalCount, pageIndex, pageSize);
-
-      return paginatedList;
-    }
-
 
     // GET: api/Animals/5
     [HttpGet("{id}")]

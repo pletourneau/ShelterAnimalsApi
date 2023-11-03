@@ -26,7 +26,6 @@
   - _Versioning has been implemented_
   - _Data storage is managed using MySQL. Entity Framework Core .NET Command-line Tools (or dotnet ef) is used for database version control -- migrations are created to tell MySQL how the database is structured and updated as needed._
 
-
 ## Setup/Installation Requirements
 
 ### Required Technology
@@ -38,6 +37,7 @@
   > ```
 
 ### Install Postman
+
 (Optional) [Download and install Postman](https://www.postman.com/downloads/).
 
 ### Setting Up the Project
@@ -69,7 +69,6 @@ _5. Within `appsettings.json`, add the following code, replacing the `uid`, and 
     "DefaultConnection": "Server=localhost;Port=3306;database=[YOUR-DATABASE-NAME-HERE];uid=[YOUR-USERNAME-HERE];pwd=[YOUR-PASSWORD-HERE];"
   }
 }
-
 ```
 
 _6. In the terminal, while in the project's production directory `ShelterAnimalsApi`, run the following command. It will utilize the repository's migrations to create and update the database. You may opt to verify that the database has been created successfully in MySQL Workbench._
@@ -99,100 +98,146 @@ _6. In the terminal, while in the project's production directory `ShelterAnimals
 > ```
 
 ## API Documentation
-Explore the API endpoints in Postman or a browser. 
 
-### Versioning
-
-This API supports versioning to ensure backward compatibility and smooth transitions as the API evolves. Currently, two versions are available: `v1.0` and `v2.0`. You can specify the version in the endpoint URL when making requests.
+Explore the API endpoints in Postman or a browser.
 
 ### Note on Pagination
 
-The default for the `pageIndex` (on which page to begin) is `1` and for `pageSize` (how many results will be displayed on each page) is `10` (v1.0) or `3` (v2.0) when returning the paginated animals list.
+The default for the `pageIndex` (on which page to begin) is `1` and for `pageSize` (how many results will be displayed on each page) is `10` when returning the paginated animals list.
 
 To modify this, alter the query parameters (the integer after the equal signs) of `pageIndex` and `pageSize` in the example query below.
 
-#### Example Queries 
-(showing different versions of this get request)
-```
-https://localhost:7135/api/Animals/v1.0/animals?pageIndex=1&pageSize=10
-
-```
-
-OR
-
-```
-https://localhost:7135/api/Animals/v2.0/animals?pageIndex=1&pageSize=3
-
-```
-
-
 ## Endpoints
+
 Base URL: `https://localhost:7135`
 
-### Animals
-Create, read, edit, and update animals
+### HTTP Request
 
-#### HTTP Request
-```
-- **Version 1.0** (v1.0)
-  - `GET /api/Animals/v1.0/animals`: Get a paginated list of animals.
-  - `POST /api/Animals`: Create a new animal record.
-  - `GET /api/Animals/{id}`: Get details of a specific animal.
-  - `PUT /api/Animals/{id}`: Update an existing animal record.
-  - `DELETE /api/Animals/{id}`: Delete an animal record.
-
-- **Version 2.0** (v2.0)
-  - `GET /api/Animals/v2.0/animals`: Get a paginated list of animals with an altered default page size.
 ```
 
+- `GET /api/Animals/animals`: Get a paginated list of animals.
+- `POST /api/Animals`: Create a new animal record.
+- `GET /api/Animals/{id}`: Get details of a specific animal.
+- `PUT /api/Animals/{id}`: Update an existing animal record.
+- `DELETE /api/Animals/{id}`: Delete an animal record.
 
-#### Path Parameters
-| Parameter | Type | Default | Required | Description |
-| :---: | :---: | :---: | :---: | --- |
-| Name | string | none | false | Return animals matching a name string that is less than 20 characters|
-| Species | string | none | false | Return animals matching a species string that is less than 20 characters|
-| Breed | string | none | false | Return animals matching a breed string that is less than 20 characters|
-| Age | string | none | false | Return animals with an age greater than or equal to the age integer between 1 and 50|
+```
 
-#### Example Queries
+### Path Parameters
 
-Here are some example query URLs for the `v1.0` and `v2.0` endpoints:
+| Parameter |  Type  | Default | Required | Description                                                                          |
+| :-------: | :----: | :-----: | :------: | ------------------------------------------------------------------------------------ |
+| AnimalId  |  int   |  none   |  false   | Return animals matching a name string that is less than 20 characters                |
+|   Name    | string |  none   |   true   | Return animals matching a name string that is less than 20 characters                |
+|  Species  | string |  none   |   true   | Return animals matching a species string that is less than 20 characters             |
+|   Breed   | string |  none   |   true   | Return animals matching a breed string that is less than 20 characters               |
+|    Age    |  int   |  none   |   true   | Return animals with an age greater than or equal to the age integer between 1 and 50 |
 
-- Version 1.0:
-  - Get the first page of animals with the default page size: 
-  ```
-  `https://localhost:7135/api/Animals/v1.0/animals?pageIndex=1&pageSize=10`
-  ```
+### Example Queries
 
-  - Custom query with filters: 
-  
-  ```
-  `https://localhost:7135/api/Animals/v1.0/animals?species=dog&name=ingrid&minimumAge=4&breed=shih-tzu&pageIndex=1&pageSize=10`
-  ```
+Here are some example query URLs for the endpoints:
 
-- Version 2.0:
-  - Get the first page of animals with a different page size: 
-  ```
-  `https://localhost:7135/api/Animals/v2.0/animals?pageIndex=1&pageSize=3`
-  ```
+#### Get Request for all animals:
 
-> Note: The query parameters can be combined, and any of them can be omitted in the search.
+```
+https://localhost:7135/api/Animals/animals
 
+```
 
-#### Sample JSON Response
+#### Get Request for a single animal based on AnimalId:
 
-When making `GET` requests, you will receive a JSON response containing details of the animals, including the following fields:
+```
+https://localhost:7135/api/Animals/1
+
+```
+
+Change the integer on the end of the request above to match the AnimalId of the animal for which you are searching.
+
+#### Post Request to enter a new animal into the database:
+
+```
+https://localhost:7135/api/Animals/
+
+```
+
+The body of your post request should follow this format:
 
 ```
 {
-  "animalId": 0,
   "name": "string",
   "species": "string",
   "breed": "string",
   "age": 50
 }
-``` 
+```
 
+> Note: Do NOT enter in an AnimalId, as it is automatically generated. All other fields are required.
+
+#### Put Request to edit an animal already entered into the database:
+
+```
+https://localhost:7135/api/Animals/1
+
+```
+
+The body of your put request should follow this format:
+
+```
+{
+  "animalId": 1
+  "name": "string",
+  "species": "string",
+  "breed": "string",
+  "age": 50
+}
+```
+
+> Note: The animalId given in the body of the request MUST match the integer at the end of the path. In this case, both animalId's match, and the request will be processed. If the numbers do not match a 400 error will be returned.
+
+#### Delete Request for a single animal based on AnimalId:
+
+```
+https://localhost:7135/api/Animals/1
+
+```
+
+> Note: Change the integer on the end of the request above to match the AnimalId of the animal that you are deleting.
+
+#### Get the first page of animals with the default page size:
+
+```
+
+`https://localhost:7135/api/Animals/animals?pageIndex=1&pageSize=10`
+
+```
+
+> Note: You can change the amount of animals listed on each page by altering the value for `pageSize` at the end of the query.
+
+#### Custom query with filters:
+
+```
+
+`https://localhost:7135/api/Animals/animals?species=dog&name=matilda&age=4&breed=bichon&pageIndex=1&pageSize=10`
+
+```
+
+> Note: The query parameters can be combined, and any of them can be omitted in the search.
+
+### Sample JSON Response
+
+When making `GET` requests, you will receive a JSON response containing details of the animals, including the following fields:
+
+```
+
+{
+"animalId": 0,
+"name": "string",
+"species": "string",
+"breed": "string",
+"age": 50
+}
+
+```
 
 ## Known Bugs
 
@@ -209,3 +254,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Copyright (c) _2023_ _Paul LeTourneau_
+
+```
+
+```
